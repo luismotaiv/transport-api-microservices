@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+*.metadata
 
 # Log file
 *.log
@@ -10,9 +11,22 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Maven
+target/
 *.jar
 *.war
+
+# Eclipse/STS
+.classpath
+.project
+.settings/
+.factorypath
+
+# Spring Boot
+*.log
+application-local.properties
+
+# Package Files #
 *.nar
 *.ear
 *.zip
