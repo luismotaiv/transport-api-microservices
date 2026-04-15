@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.transport.driver_service.model.Driver;
 
 public interface DriverRepository extends JpaRepository<Driver, UUID> {
+
     List<Driver> findByActiveTrue();
+
+    boolean existsByLicenseNumber(String licenseNumber);
 }

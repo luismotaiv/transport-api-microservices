@@ -1,0 +1,15 @@
+server:
+  port: 8083
+
+file:
+  upload-dir: uploads/
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+logging:
+  level:
+    root: INFO
