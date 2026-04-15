@@ -1,0 +1,22 @@
+services:
+
+  mysql-auth:
+    image: mysql:8
+
+  mysql-driver:
+    image: mysql:8
+
+  mysql-order:
+    image: mysql:8
+
+  auth-service:
+    build: ./auth-service
+
+  driver-service:
+    build: ./driver-service
+
+  order-service:
+    build: ./order-service
+
+  file-service:
+    build: ./file-service
