@@ -85,6 +85,8 @@ public class OrderService {
                 order.getOrigin(),
                 order.getDestination(),
                 order.getDriverId(),
+                order.getPdfUrl(),
+                order.getImageUrl(),
                 order.getCreatedAt(),
                 order.getUpdatedAt()
         );

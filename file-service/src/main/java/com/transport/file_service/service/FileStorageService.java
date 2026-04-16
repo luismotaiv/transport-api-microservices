@@ -41,7 +41,8 @@ public class FileStorageService {
 
             Files.write(path, file.getBytes());
 
-            String fileUrl = path.toString().replace("\\", "/");
+            //String fileUrl = path.toString().replace("\\", "/");
+            String fileUrl = "http://localhost:8083/files/" + fileName;
 
             return new FileResponseDTO(fileName, fileUrl);
 

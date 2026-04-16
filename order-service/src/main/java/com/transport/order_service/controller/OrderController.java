@@ -23,33 +23,54 @@ import com.transport.order_service.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@Tag(name = "Orders", description = "Gestión de órdenes de transporte")
 public class OrderController {
 
     private final OrderService service;
 
+    @Operation(summary = "Crear una nueva orden")
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> create(@Valid @RequestBody OrderRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
+    public ResponseEntity<OrderResponseDTO> create(
+            @Valid @RequestBody OrderRequestDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(service.create(dto));
     }
 
+    @Operation(summary = "Asignar driver y archivos a una orden")
     @PatchMapping("/{id}/driver")
-    public OrderResponseDTO assignDriver(
+    public ResponseEntity<OrderResponseDTO> assignDriver(
+            @Parameter(description = "ID de la orden")
             @PathVariable UUID id,
+
             @RequestBody AssignDriverRequestDTO dto,
+
+            @Parameter(description = "Token JWT")
             @RequestHeader("Authorization") String token) {
 
-        return service.assignDriver(id, dto, token);
+        return ResponseEntity.ok(service.assignDriver(id, dto, token));
     }
 
+    @Operation(summary = "Filtrar órdenes")
     @GetMapping
-    public List<OrderResponseDTO> filter(
+    public ResponseEntity<List<OrderResponseDTO>> filter(
+
+            @Parameter(description = "Estado de la orden")
             @RequestParam(required = false) String status,
+
+            @Parameter(description = "Origen")
             @RequestParam(required = false) String origin,
+
+            @Parameter(description = "Destino")
             @RequestParam(required = false) String destination) {
 
-        return service.filter(status, origin, destination);
+        return ResponseEntity.ok(service.filter(status, origin, destination));
     }
 }

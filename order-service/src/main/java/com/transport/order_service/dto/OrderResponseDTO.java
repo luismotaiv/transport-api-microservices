@@ -19,6 +19,9 @@ public class OrderResponseDTO {
     private String origin;
     private String destination;
     private UUID driverId;
+    
+    private String pdfUrl;
+    private String imageUrl;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
