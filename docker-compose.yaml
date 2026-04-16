@@ -1,22 +1,106 @@
 services:
 
+  # ======================
+  # AUTH DB
+  # ======================
   mysql-auth:
     image: mysql:8
-
-  mysql-driver:
-    image: mysql:8
-
-  mysql-order:
-    image: mysql:8
+    container_name: mysql-auth
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: auth_db
+    ports:
+      - "3307:3306"
+    networks:
+      - transport-net
 
   auth-service:
     build: ./auth-service
+    container_name: auth-service
+    depends_on:
+      - mysql-auth
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-auth:3306/auth_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+    networks:
+      - transport-net
+
+  # ======================
+  # DRIVER DB
+  # ======================
+  mysql-driver:
+    image: mysql:8
+    container_name: mysql-driver
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: driver_db
+    ports:
+      - "3308:3306"
+    networks:
+      - transport-net
 
   driver-service:
     build: ./driver-service
+    container_name: driver-service
+    depends_on:
+      - mysql-driver
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-driver:3306/driver_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8081:8081"
+    networks:
+      - transport-net
+
+  # ======================
+  # ORDER DB
+  # ======================
+  mysql-order:
+    image: mysql:8
+    container_name: mysql-order
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: order_db
+    ports:
+      - "3309:3306"
+    networks:
+      - transport-net
 
   order-service:
     build: ./order-service
+    container_name: order-service
+    depends_on:
+      - mysql-order
+      - driver-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-order:3306/order_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SERVICES_DRIVER_URL: http://driver-service:8081
+    ports:
+      - "8082:8082"
+    networks:
+      - transport-net
 
+  # ======================
+  # FILE SERVICE
+  # ======================
   file-service:
     build: ./file-service
+    container_name: file-service
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./uploads:/uploads
+    networks:
+      - transport-net
+
+# ======================
+# NETWORK
+# ======================
+networks:
+  transport-net:
